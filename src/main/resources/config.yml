@@ -1,0 +1,16 @@
+blocks:
+  BEDROCK:
+    durability: 3
+  OBSIDIAN:
+    durability: 3
+  CHEST:
+    durability: 3
+  GRASS_BLOCK:
+    durability: 10
+world-options:
+  disable-bedrock-floor:
+    - world
+  disable-bedrock-roof:
+    - world_nether
+durability-material-checker: STICK
+block-break-effect: MOBSPAWNER_FLAMES

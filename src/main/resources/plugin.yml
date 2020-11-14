@@ -1,0 +1,9 @@
+name: CrackedBlocks
+main: lee.code.crackedblocks.CrackedBlocks
+version: ${project.version}
+api-version: 1.13
+author: Lee
+commands:
+  cb:
+    description: Main command for plugin.
+    permission: cb.command.use
