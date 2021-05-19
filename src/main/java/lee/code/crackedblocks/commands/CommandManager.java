@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandManager implements CommandExecutor {
-    @Getter
-    public final ArrayList<SubCommand> subCommands = new ArrayList<>();
+
+    @Getter private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
     public CommandManager() {
         subCommands.add(new Reload());
@@ -49,9 +49,7 @@ public class CommandManager implements CommandExecutor {
             lines.add("&r");
 
             for (int i = 0; i < getSubCommands().size(); i++) {
-                //perm check
                 if (p.hasPermission(getSubCommands().get(i).getPermission())) {
-                    //add command to list
                     lines.add(Lang.MESSAGE_HELP_SUB_COMMAND.getConfigValue(new String [] { String.valueOf(number), getSubCommands().get(i).getSyntax(), getSubCommands().get(i).getDescription() }));
                     number++;
                 }

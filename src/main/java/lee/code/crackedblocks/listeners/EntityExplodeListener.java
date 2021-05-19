@@ -6,52 +6,57 @@ import lee.code.crackedblocks.files.defaults.Settings;
 import lee.code.crackedblocks.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import java.util.ArrayList;
-
 public class EntityExplodeListener implements Listener {
 
     @EventHandler
     public void onExplode(EntityExplodeEvent e) {
+        CrackedBlocks plugin = CrackedBlocks.getPlugin();
 
         //dragon check
         if (e.getEntityType() == EntityType.ENDER_DRAGON) return;
 
-        //water check from location of explosion
-        if (Settings.WATER_PROTECTION.getConfigValue() && e.getLocation().getBlock().getType() == XMaterial.WATER.parseMaterial()) return;
+        e.blockList().removeIf(block -> plugin.getData().getBlocks().contains(block.getType()));
 
-        CrackedBlocks plugin = CrackedBlocks.getPlugin();
+        Location location = e.getLocation();
+        World world = location.getWorld();
 
-        for (Block block : new ArrayList<Block>(e.blockList())) {
-            if (plugin.getData().getBlocks().contains(block.getType())) {
-                e.blockList().remove(block);
-                Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
-            }
-        }
+        if (world != null) {
+            int r = 1;
+            for (int x = r * -1; x <= r; x++) {
+                for (int y = r * -1; y <= r; y++) {
+                    for (int z = r * -1; z <= r; z++) {
+                        Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
 
-        Location explodePos = e.getLocation();
-        int r = 1;
-        for (int x = r * -1; x <= r; x++) {
-            for (int y = r * -1; y <= r; y++) {
-                for (int z = r * -1; z <= r; z++) {
-                    Block block = explodePos.getWorld().getBlockAt(explodePos.getBlockX() + x, explodePos.getBlockY() + y, explodePos.getBlockZ() + z);
-
-                    //check for bedrock
-                    if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
-                        if (block.getLocation().getBlockY() >= 127 && plugin.getData().getDisabledBedrockRoofWorlds().contains(block.getLocation().getWorld().getName())) return;
-                        if (block.getLocation().getBlockY() <= 0 && plugin.getData().getDisabledBedrockFloorWorlds().contains(block.getLocation().getWorld().getName())) return;
-                    }
-
-                    if (plugin.getData().getBlocks().contains(block.getType()) && plugin.getData().getUnbreakableBlocks().contains(block.getType())) {
-                        Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
+                        if (plugin.getData().getBlocks().contains(block.getType())) {
+                            if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
+                                if (block.getLocation().getBlockY() >= 127 && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
+                                else if (block.getLocation().getBlockY() <= 0 && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
+                            }
+                            if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
+                        }
                     }
                 }
             }
         }
+    }
+
+    private boolean hasWaterProtection(Block block) {
+        if (Settings.WATER_PROTECTION.getConfigValue()) {
+            BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+            for (BlockFace face : faces) {
+                Block relativeBlock = block.getRelative(face);
+                if (relativeBlock.getType().equals(XMaterial.WATER.parseMaterial())) return true;
+            }
+        }
+        return false;
     }
 }

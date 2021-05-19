@@ -28,7 +28,6 @@ public class Utility {
         ItemStack item;
         if (XMaterial.isOneEight()) item = new ItemStack(player.getInventory().getItemInHand());
         else item = new ItemStack(player.getInventory().getItemInMainHand());
-        item.setAmount(1);
         return item.getType();
     }
 
@@ -40,7 +39,6 @@ public class Utility {
         plugin.getData().addPlayerClickDelay(uuid);
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.runTaskLater(plugin, () ->
-                plugin.getData().removePlayerClickDelay(uuid), 5);
+        scheduler.runTaskLater(plugin, () -> plugin.getData().removePlayerClickDelay(uuid), 5);
     }
 }

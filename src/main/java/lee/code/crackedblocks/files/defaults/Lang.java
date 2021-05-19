@@ -17,7 +17,7 @@ public enum Lang {
     //Message Help info divider
     MESSAGE_HELP_DIVIDER("MESSAGE_HELP_DIVIDER", "&e▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"),
     //Message Help info title
-    MESSAGE_HELP_TITLE("MESSAGE_HELP_TITLE", "      &d-== &5&l&nCrackedBlocks Help&r &d==-"),
+    MESSAGE_HELP_TITLE("MESSAGE_HELP_TITLE", "             &d-== &5&l&nCrackedBlocks Help&r &d==-"),
     //Message Help info sub command
     MESSAGE_HELP_SUB_COMMAND("MESSAGE_HELP_SUB_COMMAND", "&3{0}&b. &e{1} &c| &7{2}"),
     //Message plugin has reloaded

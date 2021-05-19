@@ -9,6 +9,7 @@ import lee.code.crackedblocks.files.defaults.Settings;
 import lee.code.crackedblocks.listeners.BlockBreakListener;
 import lee.code.crackedblocks.listeners.EntityExplodeListener;
 import lee.code.crackedblocks.listeners.InteractCrackedBlockListener;
+import lee.code.crackedblocks.listeners.PlayerBlockBreakListener;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,6 +48,7 @@ public class CrackedBlocks extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InteractCrackedBlockListener(), this);
         getServer().getPluginManager().registerEvents(new EntityExplodeListener(), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerBlockBreakListener(), this);
     }
 
     public void loadDefaults() {

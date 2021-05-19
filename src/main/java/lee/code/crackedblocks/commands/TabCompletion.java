@@ -1,6 +1,5 @@
 package lee.code.crackedblocks.commands;
 
-import lee.code.crackedblocks.CrackedBlocks;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -11,9 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class TabCompletion implements TabCompleter {
 
     private final List<String> subCommands = Arrays.asList("reload", "list");

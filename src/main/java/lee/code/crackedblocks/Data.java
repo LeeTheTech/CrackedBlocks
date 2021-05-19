@@ -3,6 +3,7 @@ package lee.code.crackedblocks;
 import lee.code.crackedblocks.xseries.XMaterial;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -19,9 +20,6 @@ public class Data {
 
     //block List
     @Getter private final List<Material> blocks = new ArrayList<>();
-
-    //unbreakable block List
-    @Getter private final List<Material> unbreakableBlocks = new ArrayList<>();
 
     //block max durability
     private final HashMap<Material, Integer> blockMaxDurability = new HashMap<>();
@@ -45,11 +43,6 @@ public class Data {
     //add to block list
     private void addBlock(Material mat) {
         blocks.add(mat);
-    }
-
-    //add to unbreakable block list
-    private void addUnbreakableBlock(Material mat) {
-        unbreakableBlocks.add(mat);
     }
 
     //check if player is on menu click delay
@@ -83,26 +76,18 @@ public class Data {
         clearData();
 
         FileConfiguration file = plugin.getFile("config").getData();
+        ConfigurationSection config = file.getConfigurationSection("blocks");
 
-        file.getConfigurationSection("blocks").getKeys(false).forEach(block -> {
-            addBlock(XMaterial.valueOf(block).parseMaterial());
-            setBlockMaxDurability(XMaterial.valueOf(block).parseMaterial(), file.getInt("blocks." + block + ".durability"));
-        });
+        if (config != null) {
+            config.getKeys(false).forEach(block -> {
+                addBlock(XMaterial.valueOf(block).parseMaterial());
+                setBlockMaxDurability(XMaterial.valueOf(block).parseMaterial(), file.getInt("blocks." + block + ".durability"));
+            });
 
-        setDisabledBedrockFloorWorlds(file.getStringList("world-options.disable-bedrock-floor"));
-        setDisabledBedrockRoofWorlds(file.getStringList("world-options.disable-bedrock-roof"));
-        setCheckerItem(XMaterial.valueOf(file.getString("durability-material-checker")).parseMaterial());
-        setBreakEffect(file.getString("block-break-effect"));
-
-        if (getUnbreakableBlocks().isEmpty()) loadUnbreakableBlocks();
-    }
-
-    private void loadUnbreakableBlocks() {
-        addUnbreakableBlock(XMaterial.BEDROCK.parseMaterial());
-        addUnbreakableBlock(XMaterial.OBSIDIAN.parseMaterial());
-        addUnbreakableBlock(XMaterial.CRYING_OBSIDIAN.parseMaterial());
-        addUnbreakableBlock(XMaterial.ENCHANTING_TABLE.parseMaterial());
-        addUnbreakableBlock(XMaterial.ANVIL.parseMaterial());
-        addUnbreakableBlock(XMaterial.ENDER_CHEST.parseMaterial());
+            setDisabledBedrockFloorWorlds(file.getStringList("world-options.disable-bedrock-floor"));
+            setDisabledBedrockRoofWorlds(file.getStringList("world-options.disable-bedrock-roof"));
+            setCheckerItem(XMaterial.valueOf(file.getString("durability-material-checker")).parseMaterial());
+            setBreakEffect(file.getString("block-break-effect"));
+        }
     }
 }
