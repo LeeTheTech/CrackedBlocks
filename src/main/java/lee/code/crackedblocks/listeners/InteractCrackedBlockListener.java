@@ -18,7 +18,7 @@ public class InteractCrackedBlockListener implements Listener {
 
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 
-            Material handItem = plugin.getUtility().getHandItemType(e.getPlayer());
+            Material handItem = plugin.getPU().getHandItemType(e.getPlayer());
             Material checkerItem = plugin.getData().getCheckerItem();
 
             if (!handItem.equals(checkerItem)) return;
@@ -26,7 +26,7 @@ public class InteractCrackedBlockListener implements Listener {
 
             //click delay
             if (plugin.getData().getPlayerClickDelay(e.getPlayer().getUniqueId())) return;
-            else plugin.getUtility().addPlayerClickDelay(e.getPlayer().getUniqueId());
+            else plugin.getPU().addPlayerClickDelay(e.getPlayer().getUniqueId());
 
             Block block = e.getClickedBlock();
             if (block != null) {
@@ -35,10 +35,10 @@ public class InteractCrackedBlockListener implements Listener {
                     if (e.getClickedBlock().hasMetadata("hits")) {
                         int currentDurability = e.getClickedBlock().getMetadata("hits").get(0).asInt();
                         e.getPlayer().sendMessage(Lang.PREFIX.getConfigValue(null) + Lang.CHECKER_INFO_MESSAGE.getConfigValue(new String[] {
-                                plugin.getUtility().formatMatFriendly(XMaterial.matchXMaterial(e.getClickedBlock().getType()).parseItem()), String.valueOf(maxDurability - currentDurability), String.valueOf(maxDurability) }));
+                                plugin.getPU().formatMatFriendly(XMaterial.matchXMaterial(e.getClickedBlock().getType()).parseItem()), String.valueOf(maxDurability - currentDurability), String.valueOf(maxDurability) }));
                     } else {
                         e.getPlayer().sendMessage(Lang.PREFIX.getConfigValue(null) + Lang.CHECKER_INFO_MESSAGE.getConfigValue(new String[] {
-                                plugin.getUtility().formatMatFriendly(XMaterial.matchXMaterial(e.getClickedBlock().getType()).parseItem()), String.valueOf(maxDurability), String.valueOf(maxDurability) }));
+                                plugin.getPU().formatMatFriendly(XMaterial.matchXMaterial(e.getClickedBlock().getType()).parseItem()), String.valueOf(maxDurability), String.valueOf(maxDurability) }));
                     }
                 }
             }

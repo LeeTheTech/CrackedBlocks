@@ -57,7 +57,7 @@ public class CommandManager implements CommandExecutor {
             lines.add("&r");
             lines.add(Lang.MESSAGE_HELP_DIVIDER.getConfigValue(null));
 
-            for (String line : lines) p.sendMessage(plugin.getUtility().format(line));
+            for (String line : lines) p.sendMessage(plugin.getPU().format(line));
             return true;
 
         }

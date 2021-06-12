@@ -17,14 +17,14 @@ public class CrackedBlocks extends JavaPlugin {
 
     @Getter private FileManager fileManager;
     @Getter private Data data;
-    @Getter private Utility utility;
+    @Getter private PluginUtility pU;
 
     @Override
     public void onEnable() {
 
         this.data = new Data();
         this.fileManager = new FileManager();
-        this.utility = new Utility();
+        this.pU = new PluginUtility();
 
         //File Manager for configs
         fileManager.addConfig("config");

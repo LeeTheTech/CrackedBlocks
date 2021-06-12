@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.UUID;
 
-public class Utility {
+public class PluginUtility {
 
     //color formatting string
     public String format(String format) {

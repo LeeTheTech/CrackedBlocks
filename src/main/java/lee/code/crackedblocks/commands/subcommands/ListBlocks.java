@@ -76,7 +76,7 @@ public class ListBlocks extends SubCommand {
                 if (blocks.get(index) != null) {
 
                     int blockNumber = index + 1;
-                    String block = plugin.getUtility().formatMatFriendly(new ItemStack(blocks.get(index)));
+                    String block = plugin.getPU().formatMatFriendly(new ItemStack(blocks.get(index)));
                     int maxDurability = plugin.getData().getBlockMaxDurability(blocks.get(index));
                     formattedList.add(Lang.MESSAGE_COMMAND_LIST_COMMAND.getConfigValue(new String[] { String.valueOf(blockNumber), block, String.valueOf(maxDurability) }));
                 }
@@ -85,7 +85,7 @@ public class ListBlocks extends SubCommand {
 
         if (formattedList.size() < 2) return;
 
-        for (String line : formattedList) player.sendMessage(plugin.getUtility().format(line));
+        for (String line : formattedList) player.sendMessage(plugin.getPU().format(line));
 
         //next page
         TextComponent next = new TextComponent(Lang.MESSAGE_COMMAND_LIST_NEXT_PAGE.getConfigValue(null));
