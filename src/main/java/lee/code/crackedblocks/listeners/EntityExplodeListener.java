@@ -11,36 +11,39 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class EntityExplodeListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onExplode(EntityExplodeEvent e) {
         CrackedBlocks plugin = CrackedBlocks.getPlugin();
 
-        //dragon check
-        if (e.getEntityType() == EntityType.ENDER_DRAGON) return;
+        if (!e.isCancelled()) {
+            //dragon check
+            if (e.getEntityType() == EntityType.ENDER_DRAGON) return;
 
-        e.blockList().removeIf(block -> plugin.getData().getBlocks().contains(block.getType()));
+            e.blockList().removeIf(block -> plugin.getData().getBlocks().contains(block.getType()));
 
-        Location location = e.getLocation();
-        World world = location.getWorld();
+            Location location = e.getLocation();
+            World world = location.getWorld();
 
-        if (world != null) {
-            int r = 1;
-            for (int x = r * -1; x <= r; x++) {
-                for (int y = r * -1; y <= r; y++) {
-                    for (int z = r * -1; z <= r; z++) {
-                        Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
+            if (world != null) {
+                int r = 1;
+                for (int x = r * -1; x <= r; x++) {
+                    for (int y = r * -1; y <= r; y++) {
+                        for (int z = r * -1; z <= r; z++) {
+                            Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
 
-                        if (plugin.getData().getBlocks().contains(block.getType())) {
-                            if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
-                                if (block.getLocation().getBlockY() >= 127 && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
-                                else if (block.getLocation().getBlockY() <= 0 && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
+                            if (plugin.getData().getBlocks().contains(block.getType())) {
+                                if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
+                                    if (block.getLocation().getBlockY() >= 127 && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
+                                    else if (block.getLocation().getBlockY() <= 0 && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
+                                }
+                                if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
                             }
-                            if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
                         }
                     }
                 }
