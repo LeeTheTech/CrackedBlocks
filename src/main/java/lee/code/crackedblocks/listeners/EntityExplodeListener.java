@@ -3,6 +3,7 @@ package lee.code.crackedblocks.listeners;
 import lee.code.crackedblocks.CrackedBlocks;
 import lee.code.crackedblocks.events.CustomBlockBreakEvent;
 import lee.code.crackedblocks.files.defaults.Settings;
+import lee.code.crackedblocks.files.defaults.Values;
 import lee.code.crackedblocks.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,8 +40,8 @@ public class EntityExplodeListener implements Listener {
 
                             if (plugin.getData().getBlocks().contains(block.getType())) {
                                 if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
-                                    if (block.getLocation().getBlockY() >= 127 && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
-                                    else if (block.getLocation().getBlockY() <= 0 && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
+                                    if (block.getLocation().getBlockY() >= Values.DISABLED_BEDROCK_ROOF.getConfigValue() && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
+                                    else if (block.getLocation().getBlockY() <= Values.DISABLED_BEDROCK_FLOOR.getConfigValue() && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
                                 }
                                 if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
                             }

@@ -6,6 +6,7 @@ import lee.code.crackedblocks.files.CustomFile;
 import lee.code.crackedblocks.files.FileManager;
 import lee.code.crackedblocks.files.defaults.Lang;
 import lee.code.crackedblocks.files.defaults.Settings;
+import lee.code.crackedblocks.files.defaults.Values;
 import lee.code.crackedblocks.listeners.BlockBreakListener;
 import lee.code.crackedblocks.listeners.EntityExplodeListener;
 import lee.code.crackedblocks.listeners.InteractCrackedBlockListener;
@@ -58,9 +59,15 @@ public class CrackedBlocks extends JavaPlugin {
         fileManager.getConfig("lang").getData().options().copyDefaults(true);
         fileManager.getConfig("lang").save();
 
-        //config
+        //settings
         Settings.setFile(fileManager.getConfig("settings").getData());
         for (Settings value : Settings.values()) fileManager.getConfig("settings").getData().addDefault(value.getPath(), value.getDefault());
+        fileManager.getConfig("settings").getData().options().copyDefaults(true);
+        fileManager.getConfig("settings").save();
+
+        //values
+        Values.setFile(fileManager.getConfig("settings").getData());
+        for (Values value : Values.values()) fileManager.getConfig("settings").getData().addDefault(value.getPath(), value.getDefault());
         fileManager.getConfig("settings").getData().options().copyDefaults(true);
         fileManager.getConfig("settings").save();
     }
