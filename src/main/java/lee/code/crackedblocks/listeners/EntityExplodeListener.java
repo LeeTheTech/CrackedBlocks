@@ -54,7 +54,7 @@ public class EntityExplodeListener implements Listener {
 
     private boolean hasWaterProtection(Block block) {
         if (Settings.WATER_PROTECTION.getConfigValue()) {
-            BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+            BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
             for (BlockFace face : faces) {
                 Block relativeBlock = block.getRelative(face);
                 if (relativeBlock.getType().equals(XMaterial.WATER.parseMaterial())) return true;

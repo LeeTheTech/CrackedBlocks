@@ -9,9 +9,12 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BlockBreakListener implements Listener {
@@ -29,6 +32,7 @@ public class BlockBreakListener implements Listener {
             block.setMetadata("hits", new FixedMetadataValue(plugin, block.getMetadata("hits").get(0).asInt() + 1));
             if (block.getMetadata("hits").get(0).asInt() >= maxDurability) {
                 if (Settings.DROP_BLOCKS.getConfigValue()) {
+                    Material mat = block.getType();
                     if (XMaterial.isNewVersion()) {
                         if (block.getState() instanceof Container) {
                             block.breakNaturally();
@@ -37,8 +41,7 @@ public class BlockBreakListener implements Listener {
                             block.setType(Material.AIR);
                         }
                     } else {
-                        Material mat = block.getType();
-                        if (mat.equals(XMaterial.CHEST.parseMaterial()) || mat.equals(XMaterial.TRAPPED_CHEST.parseMaterial()) || mat.equals(XMaterial.FURNACE.parseMaterial()) || mat.equals(XMaterial.DROPPER.parseMaterial()) || mat.equals(XMaterial.SHULKER_BOX.parseMaterial()) || mat.equals(XMaterial.BREWING_STAND.parseMaterial()) || mat.equals(XMaterial.HOPPER.parseMaterial())) {
+                        if (mat.equals(XMaterial.BEACON.parseMaterial()) || mat.equals(XMaterial.CHEST.parseMaterial()) || mat.equals(XMaterial.TRAPPED_CHEST.parseMaterial()) || mat.equals(XMaterial.FURNACE.parseMaterial()) || mat.equals(XMaterial.DROPPER.parseMaterial()) || mat.equals(XMaterial.SHULKER_BOX.parseMaterial()) || mat.equals(XMaterial.BREWING_STAND.parseMaterial()) || mat.equals(XMaterial.HOPPER.parseMaterial())) {
                             block.breakNaturally();
                         } else {
                             world.dropItemNaturally(block.getLocation(), new ItemStack(block.getType()));
@@ -50,5 +53,17 @@ public class BlockBreakListener implements Listener {
                 world.playEffect(block.getLocation(), Effect.valueOf(plugin.getData().getBreakEffect()), 1);
             }
         }
+    }
+
+    private ItemStack createSpawner(EntityType type) {
+        ItemStack spawner = new ItemStack(Material.SPAWNER);
+        BlockStateMeta spawnerMeta = (BlockStateMeta) spawner.getItemMeta();
+        if (spawnerMeta != null) {
+            CreatureSpawner spawnerCS = (CreatureSpawner) spawnerMeta.getBlockState();
+            spawnerCS.setSpawnedType(type);
+            spawnerMeta.setBlockState(spawnerCS);
+            spawner.setItemMeta(spawnerMeta);
+        }
+        return spawner;
     }
 }
