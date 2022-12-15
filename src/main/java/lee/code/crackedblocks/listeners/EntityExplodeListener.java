@@ -25,23 +25,20 @@ public class EntityExplodeListener implements Listener {
         if (!e.isCancelled()) {
             if (e.getEntityType() == EntityType.ENDER_DRAGON) return;
             e.blockList().removeIf(block -> data.getBlocks().contains(block.getType()));
-
             Location location = e.getLocation();
             World world = location.getWorld();
-
-            if (world != null) {
-                int r = 1;
-                for (int x = r * -1; x <= r; x++) {
-                    for (int y = r * -1; y <= r; y++) {
-                        for (int z = r * -1; z <= r; z++) {
-                            Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
-                            if (data.getBlocks().contains(block.getType())) {
-                                if (block.getType() == Material.BEDROCK) {
-                                    if (block.getLocation().getBlockY() >= FileConfig.DISABLED_BEDROCK_ROOF_Y.getInt() && FileConfig.DISABLED_BEDROCK_ROOF_WORLDS.getStringList().contains(world.getName())) return;
-                                    else if (block.getLocation().getBlockY() <= FileConfig.DISABLED_BEDROCK_FLOOR_Y.getInt() &&FileConfig.DISABLED_BEDROCK_FLOOR_WORLDS.getStringList().contains(world.getName())) return;
-                                }
-                                if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
+            if (world == null) return;
+            int r = 1;
+            for (int x = r * -1; x <= r; x++) {
+                for (int y = r * -1; y <= r; y++) {
+                    for (int z = r * -1; z <= r; z++) {
+                        Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
+                        if (data.getBlocks().contains(block.getType())) {
+                            if (block.getType() == Material.BEDROCK) {
+                                if (block.getLocation().getBlockY() >= FileConfig.DISABLED_BEDROCK_ROOF_Y.getInt() && FileConfig.DISABLED_BEDROCK_ROOF_WORLDS.getStringList().contains(world.getName())) return;
+                                else if (block.getLocation().getBlockY() <= FileConfig.DISABLED_BEDROCK_FLOOR_Y.getInt() && FileConfig.DISABLED_BEDROCK_FLOOR_WORLDS.getStringList().contains(world.getName())) return;
                             }
+                            if (!isWaterProtected(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
                         }
                     }
                 }
@@ -49,7 +46,7 @@ public class EntityExplodeListener implements Listener {
         }
     }
 
-    private boolean hasWaterProtection(Block block) {
+    private boolean isWaterProtected(Block block) {
         if (FileConfig.WATER_PROTECTION.getBoolean()) {
             BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
             for (BlockFace face : faces) {

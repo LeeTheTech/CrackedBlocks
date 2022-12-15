@@ -71,7 +71,7 @@ public class ListCMD extends SubCommand {
                 }
             }
         }
-        if (lines.size() < 2) return;
+        if (lines.size() <= 2) return;
         lines.add(new TextComponent(""));
 
         TextComponent next = FileLang.COMMAND_LIST_NEXT_PAGE.getTextComponent(null);

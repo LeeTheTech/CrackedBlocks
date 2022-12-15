@@ -20,7 +20,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Data {
-
     @Getter private Material checkerMaterial;
     @Getter private Effect breakEffect;
 
