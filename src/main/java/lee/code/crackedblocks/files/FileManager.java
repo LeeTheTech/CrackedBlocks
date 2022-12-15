@@ -1,49 +1,61 @@
 package lee.code.crackedblocks.files;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import lee.code.crackedblocks.CrackedBlocks;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+import lee.code.crackedblocks.Core;
+import lee.code.crackedblocks.CrackedBlocks;
+import org.bukkit.configuration.file.FileConfiguration;
+
 public class FileManager {
 
-    private final ConcurrentHashMap<String, CustomFile> configs = new ConcurrentHashMap<>();
+    protected CrackedBlocks plugin;
+    protected final ConcurrentHashMap<String, CustomYML> ymlFiles = new ConcurrentHashMap<>();
 
-    public void addConfig(String name) {
-        CrackedBlocks plugin = CrackedBlocks.getPlugin();
-        configs.put(name, new CustomFile(name + ".yml", "", plugin.getResource(name + ".yml"), plugin));
+    public FileManager(CrackedBlocks plugin) { this.plugin = plugin; }
+
+    public void createYML(String name) { ymlFiles.put(name, new CustomYML(name + ".yml", "", plugin)); }
+
+    public CustomYML getYML(String name) { return ymlFiles.get(name); }
+
+    public String getStringFromFile(String config, String path, String[] variables) {
+        FileConfiguration fileConfig = ymlFiles.get(config).getFile();
+        String value = fileConfig.getString(path);
+        value = value != null ? value : "";
+        if (variables == null || variables.length == 0) return Core.parseColorString(value);
+        for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
+        return Core.parseColorString(value);
     }
 
-    public void addConfig(String name, String path) {
-        CrackedBlocks plugin = CrackedBlocks.getPlugin();
-        configs.put(name, new CustomFile(name + ".yml", path, plugin.getResource(name + ".yml"), plugin));
+    public boolean getBooleanFromFile(String config, String path) {
+        return ymlFiles.get(config).getFile().getBoolean(path);
     }
 
-    public CustomFile getConfig(String name) {
-        return configs.get(name);
+    public int getIntFromFile(String config, String path) {
+        return ymlFiles.get(config).getFile().getInt(path);
     }
 
-    public void reloadAll() {
-        configs.values().forEach(CustomFile::reload);
+    public List<String> getStringListFromFile(String config, String path) {
+        return ymlFiles.get(config).getFile().getStringList(path);
     }
 
-    public void loadConfigFolder(String path) {
-        CrackedBlocks plugin = CrackedBlocks.getPlugin();
-        final File folder = new File(path);
-        File[] files = folder.listFiles();
-        if (files == null) return;
+    public int getValueFromFile(String config, String path) {
+        FileConfiguration fileConfig = ymlFiles.get(config).getFile();
+        String value = fileConfig.getString(path);
+        return value != null ? Integer.parseInt(value) : 0;
+    }
 
-        for (File file : files) {
-            if (file.getName().endsWith(".yml")) {
-                try {
-                    FileInputStream inputStream = new FileInputStream(file);
-                    String name = file.getName().replace(".yml", "");
-                    configs.put(name, new CustomFile(file.getName(), "", inputStream, plugin));
-                } catch (FileNotFoundException ignored) {
-                    plugin.getLogger().log(Level.SEVERE, "Failed to load configuration file: " + file.getName());
-                }
-            }
-        }
+    public void setValueInFile(String config, String path, int value) {
+        CustomYML yml = ymlFiles.get(config);
+        FileConfiguration fileConfig = yml.getFile();
+        fileConfig.set(path, value);
+        yml.saveFile();
+    }
+
+    public void setStringInFile(String config, String path, String string) {
+        CustomYML yml = ymlFiles.get(config);
+        FileConfiguration fileConfig = yml.getFile();
+        fileConfig.set(path, string);
+        yml.saveFile();
     }
 }

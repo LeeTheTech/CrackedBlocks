@@ -1,12 +1,12 @@
 package lee.code.crackedblocks.listeners;
 
 import lee.code.crackedblocks.CrackedBlocks;
+import lee.code.crackedblocks.Data;
 import lee.code.crackedblocks.events.CustomBlockBreakEvent;
-import lee.code.crackedblocks.files.defaults.Settings;
-import lee.code.crackedblocks.files.defaults.Values;
-import lee.code.crackedblocks.xseries.XMaterial;
+import lee.code.crackedblocks.files.file.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,12 +21,10 @@ public class EntityExplodeListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onExplode(EntityExplodeEvent e) {
         CrackedBlocks plugin = CrackedBlocks.getPlugin();
-
+        Data data = plugin.getData();
         if (!e.isCancelled()) {
-            //dragon check
             if (e.getEntityType() == EntityType.ENDER_DRAGON) return;
-
-            e.blockList().removeIf(block -> plugin.getData().getBlocks().contains(block.getType()));
+            e.blockList().removeIf(block -> data.getBlocks().contains(block.getType()));
 
             Location location = e.getLocation();
             World world = location.getWorld();
@@ -37,11 +35,10 @@ public class EntityExplodeListener implements Listener {
                     for (int y = r * -1; y <= r; y++) {
                         for (int z = r * -1; z <= r; z++) {
                             Block block = world.getBlockAt(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
-
-                            if (plugin.getData().getBlocks().contains(block.getType())) {
-                                if (block.getType() == XMaterial.BEDROCK.parseMaterial()) {
-                                    if (block.getLocation().getBlockY() >= Values.DISABLED_BEDROCK_ROOF.getConfigValue() && plugin.getData().getDisabledBedrockRoofWorlds().contains(world.getName())) return;
-                                    else if (block.getLocation().getBlockY() <= Values.DISABLED_BEDROCK_FLOOR.getConfigValue() && plugin.getData().getDisabledBedrockFloorWorlds().contains(world.getName())) return;
+                            if (data.getBlocks().contains(block.getType())) {
+                                if (block.getType() == Material.BEDROCK) {
+                                    if (block.getLocation().getBlockY() >= FileConfig.DISABLED_BEDROCK_ROOF_Y.getInt() && FileConfig.DISABLED_BEDROCK_ROOF_WORLDS.getStringList().contains(world.getName())) return;
+                                    else if (block.getLocation().getBlockY() <= FileConfig.DISABLED_BEDROCK_FLOOR_Y.getInt() &&FileConfig.DISABLED_BEDROCK_FLOOR_WORLDS.getStringList().contains(world.getName())) return;
                                 }
                                 if (!hasWaterProtection(block)) Bukkit.getServer().getPluginManager().callEvent(new CustomBlockBreakEvent(block));
                             }
@@ -53,11 +50,11 @@ public class EntityExplodeListener implements Listener {
     }
 
     private boolean hasWaterProtection(Block block) {
-        if (Settings.WATER_PROTECTION.getConfigValue()) {
+        if (FileConfig.WATER_PROTECTION.getBoolean()) {
             BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
             for (BlockFace face : faces) {
                 Block relativeBlock = block.getRelative(face);
-                if (relativeBlock.getType().equals(XMaterial.WATER.parseMaterial())) return true;
+                if (relativeBlock.getType().equals(Material.WATER)) return true;
             }
         }
         return false;

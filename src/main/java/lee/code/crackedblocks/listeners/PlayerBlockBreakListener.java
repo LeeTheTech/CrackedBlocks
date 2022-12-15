@@ -10,9 +10,7 @@ public class PlayerBlockBreakListener implements Listener {
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent e) {
-        CrackedBlocks plugin = CrackedBlocks.getPlugin();
         Block block = e.getBlock();
-
-        if (block.hasMetadata("hits")) block.removeMetadata("hits", plugin);
+        if (block.hasMetadata("hits")) block.removeMetadata("hits", CrackedBlocks.getPlugin());
     }
 }
