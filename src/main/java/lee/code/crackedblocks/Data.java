@@ -22,7 +22,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Data {
     @Getter private Material checkerMaterial;
     @Getter private Effect breakEffect;
-
     private final ArrayList<UUID> clickDelay = new ArrayList<>();
     @Getter private final ArrayList<Material> blocks = new ArrayList<>();
     private final ConcurrentHashMap<Material, Integer> blockMaxDurability = new ConcurrentHashMap<>();
@@ -30,9 +29,15 @@ public class Data {
     public int getBlockMaxDurability(Material mat) {
         return blockMaxDurability.get(mat);
     }
-    public void addClickDelay(UUID uuid) { clickDelay.add(uuid); }
-    public void removeClickDelay(UUID uuid) { clickDelay.remove(uuid); }
-    public boolean hasClickDelay(UUID uuid) { return clickDelay.contains(uuid); }
+    public void addClickDelay(UUID uuid) {
+        clickDelay.add(uuid);
+    }
+    public void removeClickDelay(UUID uuid) {
+        clickDelay.remove(uuid);
+    }
+    public boolean hasClickDelay(UUID uuid) {
+        return clickDelay.contains(uuid);
+    }
 
     public void load() {
         clickDelay.clear();

@@ -1,22 +1,28 @@
 package lee.code.crackedblocks.files;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Locale;
 
 import lee.code.crackedblocks.Core;
 import lee.code.crackedblocks.CrackedBlocks;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class FileManager {
+    protected CrackedBlocks crackedBlocks;
+    protected final HashMap<String, CustomYML> ymlFiles = new HashMap<>();
 
-    protected CrackedBlocks plugin;
-    protected final ConcurrentHashMap<String, CustomYML> ymlFiles = new ConcurrentHashMap<>();
+    public FileManager(CrackedBlocks crackedBlocks) {
+        this.crackedBlocks = crackedBlocks;
+        Locale.setDefault(Locale.ENGLISH);
+    }
 
-    public FileManager(CrackedBlocks plugin) { this.plugin = plugin; }
+    public void createYML(String name) {
+        ymlFiles.put(name, new CustomYML(name + ".yml", "", crackedBlocks));
+    }
 
-    public void createYML(String name) { ymlFiles.put(name, new CustomYML(name + ".yml", "", plugin)); }
-
-    public CustomYML getYML(String name) { return ymlFiles.get(name); }
+    public CustomYML getYML(String name) {
+        return ymlFiles.get(name);
+    }
 
     public String getStringFromFile(String config, String path, String[] variables) {
         FileConfiguration fileConfig = ymlFiles.get(config).getFile();

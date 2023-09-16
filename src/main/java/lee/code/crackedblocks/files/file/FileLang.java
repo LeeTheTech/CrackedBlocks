@@ -27,7 +27,6 @@ public enum FileLang {
     COMMAND_LIST_PAGE_SPACER("command_list_page_spacer", " &e| "),
     COMMAND_HELP_DESCRIPTION("command_help_description", "A list of commands you can use with this plugin."),
     ERROR_NOT_CONSOLE_COMMAND("error_not_console_command", "&cThis command does not work in console."),
-    ERROR_LIST_PAGE_NOT_NUMBER("error_list_page_not_number", "&cThe input &6{0} &cis not a number."),
     ERROR_NO_PERMISSION("error_no_permission", "&cYou sadly do not have permission for this."),
     ERROR_CHECKER_NOT_SUPPORTED("error_checker_not_supported", "&cThe block &6{0} &cdoes not have custom durability."),
 

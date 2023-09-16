@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class Core {
     private final static Pattern hexPattern = Pattern.compile("\\&#[a-fA-F0-9]{6}");
+    private final static Pattern numberIntPattern = Pattern.compile("^[1-9]\\d*$");
 
     public static String parseColorString(String text) {
         if (text == null) return "";
@@ -45,7 +46,9 @@ public class Core {
         scheduler.runTaskLater(plugin, () -> data.removeClickDelay(uuid), 5L);
     }
 
-    public static boolean containOnlyIntNumbers(String string) {
-        return string.matches("[0-9]+");
+    public static boolean isPositiveIntNumber(String numbers) {
+        final String intMax = String.valueOf(Integer.MAX_VALUE);
+        if (numbers.length() > intMax.length() || (numbers.length() == intMax.length() && numbers.compareTo(intMax) > 0)) return false;
+        return numberIntPattern.matcher(numbers).matches();
     }
 }

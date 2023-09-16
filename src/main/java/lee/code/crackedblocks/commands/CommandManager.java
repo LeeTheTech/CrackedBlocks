@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class CommandManager implements CommandExecutor {
-
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
     public CommandManager() {

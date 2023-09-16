@@ -45,16 +45,9 @@ public class ListCMD extends SubCommand {
         int maxDisplayed = 10;
 
         if (args.length > 1) {
-            if (Core.containOnlyIntNumbers(args[1])) {
-                page = Integer.parseInt(args[1]);
-            } else {
-                player.sendMessage(FileLang.PREFIX.getString(null) + FileLang.ERROR_LIST_PAGE_NOT_NUMBER.getString(new String[]{ args[1]} ));
-                return;
-            }
+            if (Core.isPositiveIntNumber(args[1])) page = Integer.parseInt(args[1]);
         }
-        if (page < 0) return;
         int position = page * maxDisplayed + 1;
-
         ArrayList<TextComponent> lines = new ArrayList<>();
         lines.add(FileLang.COMMAND_LIST_HEADER.getTextComponent(null));
         lines.add(new TextComponent(""));
@@ -71,7 +64,7 @@ public class ListCMD extends SubCommand {
                 }
             }
         }
-        if (lines.size() <= 2) return;
+        if (lines.size() == 2) return;
         lines.add(new TextComponent(""));
 
         TextComponent next = FileLang.COMMAND_LIST_NEXT_PAGE.getTextComponent(null);
